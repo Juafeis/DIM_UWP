@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -27,37 +28,42 @@ namespace DIM_UWP.Activities
         public Activity4()
         {
             this.InitializeComponent();
-            Images.AddRange(new List<CompositeTransform>{ image_Transform, image_Transform2, image_Transform3, image_Transform4});
+            Images = new List<CompositeTransform>();
+            Images.AddRange( new List<CompositeTransform>{ image_Transform, image_Transform2, image_Transform3, image_Transform4});
             foreach (var imageT in Images)
             {
-                imageT.ScaleX = image_Transform.ScaleY = 1;
+                imageT.ScaleX = imageT.ScaleY = 1;
                 imageT.Rotation = 0;
             }
             
         }
 
-
-        private void Image_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        private void ManageManipulation(ManipulationDeltaRoutedEventArgs e)
         {
             var source = (FrameworkElement)e.OriginalSource;
-            image_Transform.ScaleX *= e.Delta.Scale;
-            image_Transform.ScaleY *= e.Delta.Scale;
-            image_Transform.Rotation += e.Delta.Rotation;
+            var index = int.Parse(Regex.Match(source.Name, @"\d+").Value)-1;
+            Images[index].ScaleX *= e.Delta.Scale;
+            Images[index].ScaleY *= e.Delta.Scale;
+            Images[index].Rotation += e.Delta.Rotation;
 
-            image_Transform.CenterX = image_Transform.CenterY = source.Width / 2;
+            Images[index].CenterX = Images[index].CenterY = source.Width / 2;
 
-            image_Transform.TranslateX += e.Delta.Translation.X;
-            image_Transform.TranslateY += e.Delta.Translation.Y;
+            Images[index].TranslateX += e.Delta.Translation.X;
+            Images[index].TranslateY += e.Delta.Translation.Y;
+        }
+        private void Image_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+            ManageManipulation(e);
         }
 
         private void Image_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-            image.Opacity = 0.4;
+            image1.Opacity = 0.4;
         }
 
         private void Image_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-            image.Opacity = 1;
+            image1.Opacity = 1;
         }
 
         private void Image2_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
@@ -67,7 +73,7 @@ namespace DIM_UWP.Activities
 
         private void Image2_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
+            ManageManipulation(e);
         }
 
         private void Image2_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
@@ -82,7 +88,7 @@ namespace DIM_UWP.Activities
 
         private void Image3_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
+            ManageManipulation(e);
         }
 
         private void Image3_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
@@ -97,7 +103,7 @@ namespace DIM_UWP.Activities
 
         private void Image4_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
+            ManageManipulation(e);
         }
 
         private void Image4_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)

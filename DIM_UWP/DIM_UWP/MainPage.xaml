@@ -12,7 +12,7 @@
         <NavigationView x:Name="NavView"
                     ItemInvoked="NavView_ItemInvoked"
                     SelectionChanged="NavView_SelectionChanged"
-                        IsBackEnabled="false">
+                        IsBackEnabled="false" IsSettingsVisible="False">
             <NavigationView.MenuItems>
                 <NavigationViewItemHeader x:Name="PatientNavItem" Content="Activities" />
                 <NavigationViewItem x:Name="e0" Content="Activity 1" Icon="Accept"/>

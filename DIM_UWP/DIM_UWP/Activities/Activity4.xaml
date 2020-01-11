@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
 
        
-        <Image Grid.Column="0" Grid.Row="0" x:Name="image" HorizontalAlignment="Center" Height="250" VerticalAlignment="Center" Width="250" Source="/Assets/maho.png" ManipulationDelta="Image_ManipulationDelta" ManipulationStarted="Image_ManipulationStarted" ManipulationCompleted="Image_ManipulationCompleted" ManipulationMode="All">
+        <Image Grid.Column="0" Grid.Row="0" x:Name="image1" HorizontalAlignment="Center" Height="250" VerticalAlignment="Center" Width="250" Source="/Assets/maho.png" ManipulationDelta="Image_ManipulationDelta" ManipulationStarted="Image_ManipulationStarted" ManipulationCompleted="Image_ManipulationCompleted" ManipulationMode="All">
             <Image.RenderTransform>
                 <CompositeTransform x:Name = "image_Transform"/>
             </Image.RenderTransform>
