@@ -48,7 +48,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="image" HorizontalAlignment="Center" Height="250" VerticalAlignment="Center" Width="250" Tapped="Image_Tapped" DoubleTapped="Image_DoubleTapped" RightTapped="Image_RightTapped" Holding="Image_Holding" Source="/Assets/maho.png"/>
+        <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="image" HorizontalAlignment="Center" Height="250" VerticalAlignment="Center" Width="250" Tapped="Image_Tapped" DoubleTapped="Image_DoubleTapped" RightTapped="Image_RightTapped" Holding="Image_Holding" Source="/Assets/maho2.jpg"/>
 
 
     </Grid>
