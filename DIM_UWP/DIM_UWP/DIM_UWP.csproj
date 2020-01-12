@@ -129,6 +129,9 @@
     <Compile Include="Activities\Activity4.xaml.cs">
       <DependentUpon>Activity4.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Activities\Entregable.xaml.cs">
+      <DependentUpon>Entregable.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -175,6 +178,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Activities\Activity4.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Activities\Entregable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

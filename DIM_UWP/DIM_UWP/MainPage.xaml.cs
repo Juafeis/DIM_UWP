@@ -50,16 +50,19 @@ namespace DIM_UWP
             switch (indexInt)
             {
                 case 0:
-                    ContentFrame.Navigate(typeof(Activity1), 0);
+                    ContentFrame.Navigate(typeof(Activity1));
                     break;
                 case 1:
-                    ContentFrame.Navigate(typeof(Activity2), 1);
+                    ContentFrame.Navigate(typeof(Activity2));
                     break;
                 case 2:
-                    ContentFrame.Navigate(typeof(Activity3), 2);
+                    ContentFrame.Navigate(typeof(Activity3));
                     break;
                 case 3:
-                    ContentFrame.Navigate(typeof(Activity4), 2);
+                    ContentFrame.Navigate(typeof(Activity4));
+                    break;
+                case 4:
+                    ContentFrame.Navigate(typeof(Entregable));
                     break;
             }
         }
