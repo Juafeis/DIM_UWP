@@ -42,11 +42,11 @@ namespace DIM_UWP.Activities
             {
                 if (e.IsInertial)
                 {
-                    if (Math.Abs(image_Transform.TranslateY) + image.ActualHeight * 2 > yGrid)
+                    if (Math.Abs(image_Transform.TranslateY) + image.ActualHeight >= yGrid)
                     {
                         yInertial = yInertial ? yInertial = false : yInertial = true;
                     }
-                    if (Math.Abs(image_Transform.TranslateX) + image.ActualWidth * 2 > xGrid)
+                    if (Math.Abs(image_Transform.TranslateX) + image.ActualWidth >= xGrid)
                     {
                         xInertial = xInertial ? xInertial = false : xInertial = true;
                     }
@@ -76,8 +76,8 @@ namespace DIM_UWP.Activities
 
         private void Image_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-            xGrid = grid.ActualWidth * 0.9;
-            yGrid = grid.ActualHeight * 0.87;
+            xGrid = grid.ActualWidth;
+            yGrid = grid.ActualHeight;
             
         }
 

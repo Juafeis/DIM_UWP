@@ -147,10 +147,12 @@
     <None Include="DIM_UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\ball.png" />
     <Content Include="Assets\maho.png" />
     <Content Include="Assets\maho2.jpg" />
     <Content Include="Assets\maho3.png" />
     <Content Include="Assets\maho4.jpg" />
+    <Content Include="Assets\pingpong.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

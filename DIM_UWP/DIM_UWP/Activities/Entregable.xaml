@@ -9,14 +9,14 @@
     Background="White">
 
     <Grid x:Name="grid">
-
+        
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/pingpong.png"/>
+        </Grid.Background>
         <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="image" HorizontalAlignment="Center" Height="300" VerticalAlignment="Center" Width="300" Source="/Assets/maho.png" ManipulationDelta="Image_ManipulationDelta" ManipulationStarted="Image_ManipulationStarted" ManipulationCompleted="Image_ManipulationCompleted" ManipulationMode="All" ManipulationInertiaStarting="Image_ManipulationInertiaStarting">
             <Image.RenderTransform>
                 <CompositeTransform x:Name = "image_Transform"/>
             </Image.RenderTransform>
         </Image>
-        
-
-
     </Grid>
 </Page>
