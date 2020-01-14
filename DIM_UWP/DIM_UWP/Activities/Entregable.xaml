@@ -8,15 +8,16 @@
     mc:Ignorable="d"
     Background="White">
 
-    <Grid x:Name="grid">
-        
+    <Grid x:Name="grid" DoubleTapped="Grid_DoubleTapped">
         <Grid.Background>
             <ImageBrush ImageSource="/Assets/pingpong.png"/>
-        </Grid.Background>
-        <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="image" HorizontalAlignment="Center" Height="300" VerticalAlignment="Center" Width="300" Source="/Assets/maho.png" ManipulationDelta="Image_ManipulationDelta" ManipulationStarted="Image_ManipulationStarted" ManipulationCompleted="Image_ManipulationCompleted" ManipulationMode="All" ManipulationInertiaStarting="Image_ManipulationInertiaStarting">
+        </Grid.Background> 
+        <Grid x:Name="internalGrid" BorderBrush="White" BorderThickness="12" CornerRadius="12" Padding="12" Margin="20,20,20,20">
+        </Grid>
+        <!--<Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="image" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="50" Source="/Assets/ball.png" ManipulationDelta="Image_ManipulationDelta" ManipulationStarted="Image_ManipulationStarted" ManipulationCompleted="Image_ManipulationCompleted" ManipulationMode="All" ManipulationInertiaStarting="Image_ManipulationInertiaStarting" PointerEntered="Image_PointerEntered">
             <Image.RenderTransform>
                 <CompositeTransform x:Name = "image_Transform"/>
             </Image.RenderTransform>
-        </Image>
+        </Image>-->
     </Grid>
 </Page>

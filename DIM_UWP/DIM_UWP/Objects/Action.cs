@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DIM_UWP
+namespace DIM_UWP.Objects
 {
     public class Action
     {

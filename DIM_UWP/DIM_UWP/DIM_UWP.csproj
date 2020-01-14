@@ -116,7 +116,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Action.cs" />
+    <Compile Include="Objects\Action.cs" />
     <Compile Include="Activities\Activity1.xaml.cs">
       <DependentUpon>Activity1.xaml</DependentUpon>
     </Compile>
@@ -138,6 +138,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Objects\InertialImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

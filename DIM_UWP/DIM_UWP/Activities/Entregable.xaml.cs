@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DIM_UWP.Objects;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,12 +12,20 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace DIM_UWP.Activities
 {
+    public class Elemento
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+    }
+    
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -24,34 +33,56 @@ namespace DIM_UWP.Activities
     {
         private double xGrid;
         private double yGrid;
-        private bool xInertial;
-        private bool yInertial;
+        private List<Elemento> elementos;
+        private List<InertialImage> imagenes;
 
         public Entregable()
         {
             this.InitializeComponent();
-            image_Transform.ScaleX = image_Transform.ScaleY = 1;
-            image_Transform.Rotation = 0;
-
+            elementos = new List<Elemento>();
+            imagenes = new List<InertialImage>();
         }
 
         private void Image_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
+            //Execute whatever you want from your client:
+            Image imgAux = sender as Image;
+            var image_Transform = (CompositeTransform)imgAux.RenderTransform;
+            InertialImage imagenActual = imagenes.Find(i => i.GetPosX() == image_Transform.TranslateX && i.GetPosY() == image_Transform.TranslateY);
             var element = (FrameworkElement)e.OriginalSource;
-            if(element != null)
+            bool xInertial = imagenActual.XInertia;
+            bool yInertial = imagenActual.YInertia;
+            if (element != null)
             {
                 if (e.IsInertial)
                 {
-                    if (Math.Abs(image_Transform.TranslateY) + image.ActualHeight >= yGrid)
+                    if (Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight >= yGrid)
                     {
-                        yInertial = yInertial ? yInertial = false : yInertial = true;
+                         yInertial = yInertial ? yInertial = false : yInertial = true;
                     }
-                    if (Math.Abs(image_Transform.TranslateX) + image.ActualWidth >= xGrid)
+                    if (Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= xGrid)
                     {
                         xInertial = xInertial ? xInertial = false : xInertial = true;
                     }
+                    if(elementos.Count > 0)
+                    {
+                        foreach (var elemento in elementos)
+                        {
+                            if(Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= elemento.X)
+                            {
+                                xInertial = xInertial ? xInertial = false : xInertial = true;
+                            }
+                            if(Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight >= elemento.Y)
+                            {
+                                yInertial = yInertial ? yInertial = false : yInertial = true;
+                            }
+                        }
+                    }
+                    
                 }
             }
+            imagenActual.XInertia = xInertial;
+            imagenActual.YInertia = yInertial;
             if (!xInertial && yInertial)
             {
                 image_Transform.TranslateX += e.Delta.Translation.X;
@@ -76,15 +107,17 @@ namespace DIM_UWP.Activities
 
         private void Image_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-            xGrid = grid.ActualWidth;
-            yGrid = grid.ActualHeight;
+            xGrid = internalGrid.ActualWidth/2;
+            yGrid = internalGrid.ActualHeight/2;
             
         }
 
         private void Image_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-            xInertial = false;
-            yInertial = false;
+            Image imgAux = sender as Image;
+            var image_Transform = (CompositeTransform)imgAux.RenderTransform;
+            InertialImage imagenActual = imagenes.Find(i => i.GetPosX() == image_Transform.TranslateX && i.GetPosY() == image_Transform.TranslateY);
+            imagenActual.XInertia = imagenActual.YInertia = false;
         }
 
         private void Image_ManipulationInertiaStarting(object sender, ManipulationInertiaStartingRoutedEventArgs e)
@@ -92,6 +125,32 @@ namespace DIM_UWP.Activities
             var element = e.OriginalSource as FrameworkElement;
             if (element == null) return;
             e.TranslationBehavior.DesiredDeceleration = 20.0 * 96.0 / (1000.0 * 1000.0);
+        }
+
+
+
+        private void Image_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            //Cursor gets in the path of the image
+            Image_ManipulationInertiaStarting(sender, new ManipulationInertiaStartingRoutedEventArgs());
+        }
+
+      
+
+
+        private void Grid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            var pointerPosition = Windows.UI.Core.CoreWindow.GetForCurrentThread().PointerPosition;
+            var inertialImage = new InertialImage();
+            var image = inertialImage.GetImage();
+            image.ManipulationStarted += Image_ManipulationStarted;
+            image.ManipulationDelta += Image_ManipulationDelta;
+            image.ManipulationCompleted += Image_ManipulationCompleted;
+            grid.Children.Add(image);
+            var compositeTransform = image.RenderTransform as CompositeTransform;
+            compositeTransform.TranslateX = e.GetPosition(grid).X - grid.ActualWidth / 2;
+            compositeTransform.TranslateY = e.GetPosition(grid).Y - grid.ActualHeight / 2;
+            imagenes.Add(inertialImage);
         }
     }
 }
