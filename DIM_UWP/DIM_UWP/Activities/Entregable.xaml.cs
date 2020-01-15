@@ -53,16 +53,23 @@ namespace DIM_UWP.Activities
                 {
                     if (Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= xGrid && Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight >= yGrid * 0.5)
                     {
-                        xInertial = xInertial ? xInertial = false : xInertial = true;
+                        xInertial = !xInertial;
                     }
                     if (Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight >= yGrid)
                     {
-                         yInertial = yInertial ? yInertial = false : yInertial = true;
+                         yInertial = !yInertial;
                     }
                     if (Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= xGrid && Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight < yGrid * 0.5)
                     {
-                        Goal(image_Transform.TranslateX);
-                        grid.Children.Remove(imagenActual.GetImage());
+                        try
+                        {
+                            Goal(image_Transform.TranslateX);
+                            grid.Children.Remove(imagenActual.GetImage());
+                        }
+                        catch (Exception ex)
+                        {
+                            
+                        }
                         return;
                     }
                     //if(elementos.Count > 0)
@@ -120,8 +127,8 @@ namespace DIM_UWP.Activities
 
         private void Image_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-            xGrid = grid.ActualWidth/2;
-            yGrid = grid.ActualHeight/2;
+            xGrid = internalGrid.ActualWidth/2;
+            yGrid = internalGrid.ActualHeight/2;
             
         }
 
@@ -153,7 +160,7 @@ namespace DIM_UWP.Activities
 
         private void Grid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            var pointerPosition = Windows.UI.Core.CoreWindow.GetForCurrentThread().PointerPosition;
+            //var pointerPosition = Windows.UI.Core.CoreWindow.GetForCurrentThread().PointerPosition;
             var inertialImage = new InertialImage();
             var image = inertialImage.GetImage();
             image.ManipulationStarted += Image_ManipulationStarted;
@@ -191,11 +198,11 @@ namespace DIM_UWP.Activities
 
         private void Grid_Holding(object sender, HoldingRoutedEventArgs e)
         {
-            var pointerPosition = Windows.UI.Core.CoreWindow.GetForCurrentThread().PointerPosition;
+            //var pointerPosition = Windows.UI.Core.CoreWindow.GetForCurrentThread().PointerPosition;
             var element = new Image();
             element.Source = new BitmapImage(new Uri("ms-appx:///Assets/white.png"));
-            element.Width = 10;
-            element.Height = 50;
+            element.Width = 20;
+            element.Height = 100;
             element.Stretch = Stretch.Fill;
             element.ManipulationMode = ManipulationModes.TranslateY;
             CompositeTransform compositeTransform = new CompositeTransform();

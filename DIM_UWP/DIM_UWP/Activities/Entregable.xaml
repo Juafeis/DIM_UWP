@@ -12,6 +12,7 @@
         <Grid.Background>
             <ImageBrush ImageSource="/Assets/pingpong.png"/>
         </Grid.Background>
+        <Grid x:Name="internalGrid" Margin="30,30,30,30"></Grid>
         <TextBlock x:Name="textBlockCountPlayer1" Grid.Column="0" Margin="0,50,60,0" HorizontalAlignment="Right" VerticalAlignment="Top" Text="0" FontSize="150" FocusVisualPrimaryBrush="#FFEE0000" FontFamily="Consolas">
             <TextBlock.Foreground>
                 <SolidColorBrush Color="White" Opacity="0.6"/>
