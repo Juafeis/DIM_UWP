@@ -8,16 +8,22 @@
     mc:Ignorable="d"
     Background="White">
 
-    <Grid x:Name="grid" DoubleTapped="Grid_DoubleTapped">
+    <Grid x:Name="grid" Holding="Grid_Holding" DoubleTapped="Grid_DoubleTapped">
         <Grid.Background>
             <ImageBrush ImageSource="/Assets/pingpong.png"/>
-        </Grid.Background> 
-        <Grid x:Name="internalGrid" BorderBrush="White" BorderThickness="12" CornerRadius="12" Padding="12" Margin="20,20,20,20">
-        </Grid>
-        <!--<Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="image" HorizontalAlignment="Center" Height="50" VerticalAlignment="Center" Width="50" Source="/Assets/ball.png" ManipulationDelta="Image_ManipulationDelta" ManipulationStarted="Image_ManipulationStarted" ManipulationCompleted="Image_ManipulationCompleted" ManipulationMode="All" ManipulationInertiaStarting="Image_ManipulationInertiaStarting" PointerEntered="Image_PointerEntered">
-            <Image.RenderTransform>
-                <CompositeTransform x:Name = "image_Transform"/>
-            </Image.RenderTransform>
+        </Grid.Background>
+        <TextBlock x:Name="textBlockCountPlayer1" Grid.Column="0" Margin="0,50,60,0" HorizontalAlignment="Right" VerticalAlignment="Top" Text="0" FontSize="150" FocusVisualPrimaryBrush="#FFEE0000" FontFamily="Consolas">
+            <TextBlock.Foreground>
+                <SolidColorBrush Color="White" Opacity="0.6"/>
+            </TextBlock.Foreground>
+        </TextBlock>
+        <TextBlock x:Name="textBlockCountPlayer2" Margin="60,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="0" FontSize="150" FocusVisualPrimaryBrush="#FFEE0000" FontFamily="Consolas">
+            <TextBlock.Foreground>
+                <SolidColorBrush Color="White" Opacity="0.6"/>
+            </TextBlock.Foreground>
+        </TextBlock>
+        <!--<Image Source="/Assets/white.png" Stretch="Fill">
+            
         </Image>-->
     </Grid>
 </Page>

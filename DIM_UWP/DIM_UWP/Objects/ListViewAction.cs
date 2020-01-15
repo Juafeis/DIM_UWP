@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DIM_UWP.Objects
+namespace DIM_UWP
 {
-    public class Action
+    public class ListViewAction
     {
         public string MouseAction { get; set; }
         public string Description { get; set; }

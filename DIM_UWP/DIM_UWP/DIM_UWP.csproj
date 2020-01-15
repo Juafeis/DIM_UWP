@@ -116,7 +116,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Objects\Action.cs" />
+    <Compile Include="Objects\ListViewAction.cs" />
     <Compile Include="Activities\Activity1.xaml.cs">
       <DependentUpon>Activity1.xaml</DependentUpon>
     </Compile>
@@ -154,6 +154,7 @@
     <Content Include="Assets\maho3.png" />
     <Content Include="Assets\maho4.jpg" />
     <Content Include="Assets\pingpong.png" />
+    <Content Include="Assets\white.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

@@ -20,11 +20,6 @@ using Windows.UI.Xaml.Navigation;
 
 namespace DIM_UWP.Activities
 {
-    public class Elemento
-    {
-        public double X { get; set; }
-        public double Y { get; set; }
-    }
     
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -33,13 +28,13 @@ namespace DIM_UWP.Activities
     {
         private double xGrid;
         private double yGrid;
-        private List<Elemento> elementos;
+        private List<Image> elementos;
         private List<InertialImage> imagenes;
 
         public Entregable()
         {
             this.InitializeComponent();
-            elementos = new List<Elemento>();
+            elementos = new List<Image>();
             imagenes = new List<InertialImage>();
         }
 
@@ -56,28 +51,34 @@ namespace DIM_UWP.Activities
             {
                 if (e.IsInertial)
                 {
+                    if (Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= xGrid && Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight >= yGrid * 0.5)
+                    {
+                        xInertial = xInertial ? xInertial = false : xInertial = true;
+                    }
                     if (Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight >= yGrid)
                     {
                          yInertial = yInertial ? yInertial = false : yInertial = true;
                     }
-                    if (Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= xGrid)
+                    if (Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= xGrid && Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight < yGrid * 0.5)
                     {
-                        xInertial = xInertial ? xInertial = false : xInertial = true;
+                        Goal(image_Transform.TranslateX);
+                        grid.Children.Remove(imagenActual.GetImage());
+                        return;
                     }
-                    if(elementos.Count > 0)
-                    {
-                        foreach (var elemento in elementos)
-                        {
-                            if(Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= elemento.X)
-                            {
-                                xInertial = xInertial ? xInertial = false : xInertial = true;
-                            }
-                            if(Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight >= elemento.Y)
-                            {
-                                yInertial = yInertial ? yInertial = false : yInertial = true;
-                            }
-                        }
-                    }
+                    //if(elementos.Count > 0)
+                    //{
+                    //    foreach (var elemento in elementos)
+                    //    {
+                    //        if(Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= elemento.X)
+                    //        {
+                    //            xInertial = xInertial ? xInertial = false : xInertial = true;
+                    //        }
+                    //        if(Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight >= elemento.Y)
+                    //        {
+                    //            yInertial = yInertial ? yInertial = false : yInertial = true;
+                    //        }
+                    //    }
+                    //}
                     
                 }
             }
@@ -105,10 +106,22 @@ namespace DIM_UWP.Activities
             }
         }
 
+        private void Goal(double transformX)
+        {
+            if (transformX < 0)
+            {
+                textBlockCountPlayer1.Text = (int.Parse(textBlockCountPlayer1.Text) + 1).ToString();
+            }
+            else
+            {
+                textBlockCountPlayer2.Text = (int.Parse(textBlockCountPlayer2.Text) + 1).ToString();
+            }        
+        }
+
         private void Image_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-            xGrid = internalGrid.ActualWidth/2;
-            yGrid = internalGrid.ActualHeight/2;
+            xGrid = grid.ActualWidth/2;
+            yGrid = grid.ActualHeight/2;
             
         }
 
@@ -152,5 +165,49 @@ namespace DIM_UWP.Activities
             compositeTransform.TranslateY = e.GetPosition(grid).Y - grid.ActualHeight / 2;
             imagenes.Add(inertialImage);
         }
+
+
+
+        private void Element_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+            var element = sender as Image;
+            CompositeTransform source = (CompositeTransform)element.RenderTransform;
+            source.TranslateY += e.Delta.Translation.Y;
+        }
+
+        private void Element_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
+        {
+            
+            
+        }
+
+        private void Element_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+
+        }
+
+
+
+
+        private void Grid_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            var pointerPosition = Windows.UI.Core.CoreWindow.GetForCurrentThread().PointerPosition;
+            var element = new Image();
+            element.Source = new BitmapImage(new Uri("ms-appx:///Assets/white.png"));
+            element.Width = 10;
+            element.Height = 50;
+            element.Stretch = Stretch.Fill;
+            element.ManipulationMode = ManipulationModes.TranslateY;
+            CompositeTransform compositeTransform = new CompositeTransform();
+            compositeTransform.TranslateX = e.GetPosition(grid).X - grid.ActualWidth / 2; 
+            compositeTransform.TranslateY = e.GetPosition(grid).Y - grid.ActualWidth / 2; 
+            element.RenderTransform = compositeTransform;
+            element.ManipulationStarted += Element_ManipulationStarted;
+            element.ManipulationDelta += Element_ManipulationDelta;
+            element.ManipulationCompleted += Element_ManipulationCompleted;
+            grid.Children.Add(element);
+        }
+
+       
     }
 }

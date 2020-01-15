@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DIM_UWP.Objects;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -23,18 +24,18 @@ namespace DIM_UWP.Activities
     /// </summary>
     public sealed partial class Activity2 : Page
     {
-        ObservableCollection<Action> Actions { get; set; }
+        ObservableCollection<ListViewAction> Actions { get; set; }
         public Activity2()
         {
             this.InitializeComponent();
-            Actions = new ObservableCollection<Action>();
+            Actions = new ObservableCollection<ListViewAction>();
             listView.ItemsSource = Actions;
         }
         
 
         private void AddAction(string methodName, double x, double y)
         {
-            var action = new Action
+            var action = new ListViewAction
             {
                 MouseAction = methodName,
                 Description = "Values: x = " + x.ToString() + " and y = " + y.ToString()
