@@ -15,6 +15,7 @@ namespace DIM_UWP.Objects
         private Image image = new Image();
         public bool XInertia { get; set; }
         public bool YInertia { get; set; }
+        public bool isGoal { get; set; }
 
         public InertialImage()
         {
