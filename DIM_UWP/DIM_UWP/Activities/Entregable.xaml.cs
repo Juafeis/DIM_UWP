@@ -40,17 +40,19 @@ namespace DIM_UWP.Activities
 
         private void Image_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-            //Execute whatever you want from your client:
             Image imgAux = sender as Image;
             var image_Transform = (CompositeTransform)imgAux.RenderTransform;
+            //Finds the inertial image based on its position
             InertialImage imagenActual = images.Find(i => i.GetPosX() == image_Transform.TranslateX && i.GetPosY() == image_Transform.TranslateY);
             var source = (FrameworkElement)e.OriginalSource;
             bool xInertial = imagenActual.XInertia;
             bool yInertial = imagenActual.YInertia;
             if (source != null)
             {
+                //Code to execute when the ball is droped from the cursor
                 if (e.IsInertial)
                 {
+                    //Conditions to make the ball bounce
                     if (Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= xGrid && Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight >= yGrid * 0.5)
                     {
                         xInertial = !xInertial;
@@ -59,6 +61,7 @@ namespace DIM_UWP.Activities
                     {
                          yInertial = !yInertial;
                     }
+                    //Condition if the player scores
                     if (Math.Abs(image_Transform.TranslateX) + imagenActual.GetImage().ActualWidth >= xGrid && Math.Abs(image_Transform.TranslateY) + imagenActual.GetImage().ActualHeight < yGrid * 0.5)
                     {
                         try
@@ -67,23 +70,22 @@ namespace DIM_UWP.Activities
                             e.Complete();
                             imagenActual.isGoal = true;
                         }
-                        catch (Exception)
-                        {
-                            
-                        }
+                        catch (Exception) { }
                     }
+                    //Condition for de slidebars
                     if (elements.Count > 0)
                     {
                         foreach (var element in elements)
                         {
                             var element_Transform = (CompositeTransform)element.RenderTransform;
+                            //Condition that detects the bar, and makes the ball bounce if it tries going through
                             if (Math.Abs(image_Transform.TranslateX) > Math.Abs(element_Transform.TranslateX )
                                 &&
                                 element_Transform.TranslateX*image_Transform.TranslateX > 0 
                                 &&
-                                image_Transform.TranslateY <= element_Transform.TranslateY+element_Transform.CenterY 
+                                image_Transform.TranslateY <= (element_Transform.TranslateY+element_Transform.CenterY)*element_Transform.ScaleY
                                 &&
-                                image_Transform.TranslateY > element_Transform.TranslateY - element_Transform.CenterY
+                                image_Transform.TranslateY > (element_Transform.TranslateY - element_Transform.CenterY)*element_Transform.ScaleY
                                 )
                             {
                                 xInertial = !xInertial;
@@ -97,7 +99,7 @@ namespace DIM_UWP.Activities
             imagenActual.XInertia = xInertial;
             imagenActual.YInertia = yInertial;
         
-
+            //Directions of the ball based on the bounce results ahead
             if (!xInertial && yInertial)
             {
                 image_Transform.TranslateX += e.Delta.Translation.X;
@@ -122,6 +124,7 @@ namespace DIM_UWP.Activities
 
         private void Goal(double transformX)
         {
+            //If a player scores, increases count by 1
             if (transformX < 0)
             {
                 textBlockCountPlayer1.Text = (int.Parse(textBlockCountPlayer1.Text) + 1).ToString();
@@ -134,9 +137,9 @@ namespace DIM_UWP.Activities
 
         private void Image_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
+            //Takes the grid dimensions for colision purposes
             xGrid = internalGrid.ActualWidth/2;
             yGrid = internalGrid.ActualHeight/2;
-
         }
 
         private void Image_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
@@ -145,6 +148,8 @@ namespace DIM_UWP.Activities
             var image_Transform = (CompositeTransform)imgAux.RenderTransform;
             InertialImage imagenActual = images.Find(i => i.GetPosX() == image_Transform.TranslateX && i.GetPosY() == image_Transform.TranslateY);
             imagenActual.XInertia = imagenActual.YInertia = false;
+            //If a player scores, the ball disapears
+            //Since you cannot remove the ball dynamically from the grid, we set opacity to 0
             if (imagenActual.isGoal)
             {
                 images.Remove(imagenActual);
@@ -157,11 +162,15 @@ namespace DIM_UWP.Activities
         {
             var element = e.OriginalSource as FrameworkElement;
             if (element == null) return;
+            //Ball inertial speed based on the actual formula (m/s)
             e.TranslationBehavior.DesiredDeceleration = 20.0 * 96.0 / (1000.0 * 1000.0);
         }
 
         private void Grid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
+            //Creates an Inertial Ball
+            //Inertial ball is an object that contains an Image, with several attributes
+            //Inertial ball object can be found in /Objects/InertialImage.cs
             var inertialImage = new InertialImage();
             var image = inertialImage.GetImage();
             image.ManipulationStarted += Image_ManipulationStarted;
@@ -180,19 +189,24 @@ namespace DIM_UWP.Activities
         {
             var element = sender as Image;
             CompositeTransform source = (CompositeTransform)element.RenderTransform;
-            source.Rotation *= e.Delta.Rotation;
+            source.Rotation += e.Delta.Rotation;
             source.TranslateY += e.Delta.Translation.Y;
+            //Maximum slidebar scale
+            if (source.ScaleY <= 2) { source.ScaleY *= e.Delta.Scale; }
+            
         }
 
         private void Element_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-            
+            var element = sender as Image;
+            element.Opacity = 0.4;
             
         }
 
         private void Element_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-
+            var element = sender as Image;
+            element.Opacity = 1;
         }
 
 
@@ -200,6 +214,7 @@ namespace DIM_UWP.Activities
 
         private void Grid_Holding(object sender, HoldingRoutedEventArgs e)
         {
+            //Creates a slidebar
             var element = new Image();
             if (isHolding <= 0)
             {
@@ -207,12 +222,14 @@ namespace DIM_UWP.Activities
                 element.Width = 20;
                 element.Height = 150;
                 element.Stretch = Stretch.Fill;
-                element.ManipulationMode = ManipulationModes.Rotate | ManipulationModes.TranslateY;
+                //The bar can only be moved in the Y Axis
+                element.ManipulationMode = ManipulationModes.Rotate | ManipulationModes.TranslateY | ManipulationModes.Scale;
                 CompositeTransform compositeTransform = new CompositeTransform();
                 compositeTransform.TranslateX = e.GetPosition(grid).X - grid.ActualWidth / 2;
                 compositeTransform.TranslateY = e.GetPosition(grid).Y - grid.ActualHeight / 2;
+                compositeTransform.CenterX = element.Width / 2;
                 compositeTransform.CenterY = element.Height / 2;
-                compositeTransform.Rotation = 1;
+                compositeTransform.Rotation = 0;
                 element.RenderTransform = compositeTransform;
                 element.ManipulationStarted += Element_ManipulationStarted;
                 element.ManipulationDelta += Element_ManipulationDelta;
@@ -225,8 +242,8 @@ namespace DIM_UWP.Activities
             {
                 isHolding = 0;
             }
-            //You can only have 3 barriers on a game, deleting the first one
-            if(elements.Count > 3)
+            //You can only have 4 barriers on a game, deleting the first one
+            if(elements.Count > 4)
             {
                 grid.Children.Remove(elements.First());
                 elements.Remove(elements.First());

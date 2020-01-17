@@ -78,12 +78,13 @@ namespace DIM_UWP.Activities
             image_Transform.ScaleY *= e.Delta.Scale;
             image_Transform.Rotation += e.Delta.Rotation;
 
-            image_Transform.CenterX = image_Transform.CenterY = source.Width / 2;
-            
+            image_Transform.CenterX = source.Width / 2;
+            image_Transform.CenterY = source.Height / 2;
 
-            
 
-            AddAction("Manipulation_Delta", image_Transform.ScaleX, image_Transform.ScaleY);
+
+
+           AddAction("Manipulation_Delta", image_Transform.ScaleX, image_Transform.ScaleY);
         }
 
         private void Image_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)

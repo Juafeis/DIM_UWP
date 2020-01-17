@@ -46,7 +46,8 @@ namespace DIM_UWP.Activities
             Images[index].ScaleY *= e.Delta.Scale;
             Images[index].Rotation += e.Delta.Rotation;
 
-            Images[index].CenterX = Images[index].CenterY = source.Width / 2;
+            Images[index].CenterX = source.Width / 2;
+            Images[index].CenterY = source.Height / 2;
 
             Images[index].TranslateX += e.Delta.Translation.X;
             Images[index].TranslateY += e.Delta.Translation.Y;
